@@ -84,7 +84,7 @@ export default (ComponentStyle: Function, constructWithOptions: Function) => {
       const { attrs, componentStyle, warnTooManyClasses } = this.constructor
       const styleSheet = this.context[CONTEXT_KEY] || StyleSheet.instance
 
-      // staticaly styled-components don't need to build an execution context object,
+      // statically styled-components don't need to build an execution context object,
       // and shouldn't be increasing the number of class names
       if (componentStyle.isStatic && attrs === undefined) {
         return componentStyle.generateAndInjectStyles(STATIC_EXECUTION_CONTEXT, styleSheet)
@@ -102,7 +102,7 @@ export default (ComponentStyle: Function, constructWithOptions: Function) => {
       const { componentStyle } = this.constructor
       const styledContext = this.context[CHANNEL_NEXT]
 
-      // If this is a staticaly-styled component, we don't need to the theme
+      // If this is a statically-styled component, we don't need to the theme
       // to generate or build styles.
       if (componentStyle.isStatic) {
         const generatedClassName = this.generateAndInjectStyles(
@@ -134,7 +134,7 @@ export default (ComponentStyle: Function, constructWithOptions: Function) => {
     }
 
     componentWillReceiveProps(nextProps: { theme?: Theme, [key: string]: any }) {
-      // If this is a staticaly-styled component, we don't need to listen to
+      // If this is a statically-styled component, we don't need to listen to
       // props changes to update styles
       const { componentStyle } = this.constructor
       if (componentStyle.isStatic) {
