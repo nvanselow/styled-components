@@ -4,6 +4,7 @@ import hashStr from '../vendor/glamor/hash'
 import type { RuleSet, NameGenerator, Flattener, Stringifier } from '../types'
 import StyleSheet from './StyleSheet'
 import isStyledComponent from '../utils/isStyledComponent'
+import getComponentCssSelector from '../utils/getComponentCssSelector'
 
 const isStaticRules = (rules: RuleSet): boolean => {
   for (let i = 0; i < rules.length; i += 1) {
@@ -77,10 +78,7 @@ export default (nameGenerator: NameGenerator, flatten: Flattener, stringifyRules
         return name
       }
 
-      let selector = `.${name}`
-      if (options && options.specificityClass) {
-        selector = `.${options.specificityClass} ${selector}`
-      }
+      const selector = getComponentCssSelector(name, options)
 
       const css = `\n${stringifyRules(flatCSS, selector)}`
       // NOTE: this can only be set when we inject the class-name.
