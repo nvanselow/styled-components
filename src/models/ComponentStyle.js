@@ -33,7 +33,6 @@ export default (nameGenerator: NameGenerator, flatten: Flattener, stringifyRules
     isStatic: boolean
     lastClassName: ?string
 
-
     constructor(rules: RuleSet, componentId: string) {
       this.rules = rules
       this.isStatic = isStaticRules(rules)
@@ -49,7 +48,11 @@ export default (nameGenerator: NameGenerator, flatten: Flattener, stringifyRules
      * Hashes it, wraps the whole chunk in a .hash1234 {}
      * Returns the hash to be injected on render()
      * */
-    generateAndInjectStyles(executionContext: Object, styleSheet: StyleSheet) {
+    generateAndInjectStyles(
+      executionContext: Object,
+      styleSheet: StyleSheet,
+      options: Object = {},
+    ) {
       const { isStatic, lastClassName } = this
       if (isStatic && lastClassName !== undefined) {
         return lastClassName
@@ -74,7 +77,12 @@ export default (nameGenerator: NameGenerator, flatten: Flattener, stringifyRules
         return name
       }
 
-      const css = `\n${stringifyRules(flatCSS, `.${name}`)}`
+      let selector = `.${name}`
+      if (options && options.specificityClass) {
+        selector = `.${options.specificityClass} ${selector}`
+      }
+
+      const css = `\n${stringifyRules(flatCSS, selector)}`
       // NOTE: this can only be set when we inject the class-name.
       // For some reason, presumably due to how css is stringifyRules behaves in
       // differently between client and server, styles break.
